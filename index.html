@@ -416,124 +416,13 @@ footer {
     <p>A curated collection of moments frozen in time—each frame telling its own story.</p>
   </div>
 
-  <div class="filters">
+  <div class="filters" id="filters">
     <button class="filter-btn active" data-filter="all">All</button>
-    <button class="filter-btn" data-filter="portrait">Portrait</button>
-    <button class="filter-btn" data-filter="landscape">Landscape</button>
-    <button class="filter-btn" data-filter="street">Street</button>
-    <button class="filter-btn" data-filter="nature">Nature</button>
+    <!-- Filter buttons are generated automatically from your repo folders -->
   </div>
 
-  <!-- =============================================================
-       GALLERY ITEMS — EDIT YOUR PHOTOS HERE
-       ---------------------------------------------------------
-       For each photo:
-         • Replace src="..." with your image path e.g. src="images/myphoto.jpg"
-         • Set data-category to one of: portrait, landscape, street, nature
-           (or add your own category and a matching filter button above)
-         • Update the title & category label in the overlay
-         • To add more, copy-paste one gallery-item block
-
-       TIP: Use different aspect-ratio images for a dynamic masonry look.
-       ============================================================= -->
   <div class="gallery" id="galleryGrid">
-
-    <div class="gallery-item" data-category="landscape">
-      <img src="images/photo1.jpg" alt="Golden Horizon" loading="lazy">
-      <div class="overlay">
-        <div class="photo-title">Golden Horizon</div>
-        <div class="photo-category">Landscape</div>
-      </div>
-    </div>
-
-    <div class="gallery-item" data-category="portrait">
-      <img src="images/photo2.jpg" alt="Silent Gaze" loading="lazy">
-      <div class="overlay">
-        <div class="photo-title">Silent Gaze</div>
-        <div class="photo-category">Portrait</div>
-      </div>
-    </div>
-
-    <div class="gallery-item" data-category="street">
-      <img src="images/photo3.jpg" alt="City Pulse" loading="lazy">
-      <div class="overlay">
-        <div class="photo-title">City Pulse</div>
-        <div class="photo-category">Street</div>
-      </div>
-    </div>
-
-    <div class="gallery-item" data-category="nature">
-      <img src="images/photo4.jpg" alt="Morning Dew" loading="lazy">
-      <div class="overlay">
-        <div class="photo-title">Morning Dew</div>
-        <div class="photo-category">Nature</div>
-      </div>
-    </div>
-
-    <div class="gallery-item" data-category="portrait">
-      <img src="images/photo5.jpg" alt="The Dreamer" loading="lazy">
-      <div class="overlay">
-        <div class="photo-title">The Dreamer</div>
-        <div class="photo-category">Portrait</div>
-      </div>
-    </div>
-
-    <div class="gallery-item" data-category="landscape">
-      <img src="images/photo6.jpg" alt="Distant Peaks" loading="lazy">
-      <div class="overlay">
-        <div class="photo-title">Distant Peaks</div>
-        <div class="photo-category">Landscape</div>
-      </div>
-    </div>
-
-    <div class="gallery-item" data-category="street">
-      <img src="images/photo7.jpg" alt="Neon Nights" loading="lazy">
-      <div class="overlay">
-        <div class="photo-title">Neon Nights</div>
-        <div class="photo-category">Street</div>
-      </div>
-    </div>
-
-    <div class="gallery-item" data-category="nature">
-      <img src="images/photo8.jpg" alt="Wild & Free" loading="lazy">
-      <div class="overlay">
-        <div class="photo-title">Wild &amp; Free</div>
-        <div class="photo-category">Nature</div>
-      </div>
-    </div>
-
-    <div class="gallery-item" data-category="portrait">
-      <img src="images/photo9.jpg" alt="In Between" loading="lazy">
-      <div class="overlay">
-        <div class="photo-title">In Between</div>
-        <div class="photo-category">Portrait</div>
-      </div>
-    </div>
-
-    <div class="gallery-item" data-category="landscape">
-      <img src="images/photo10.jpg" alt="Ocean Breath" loading="lazy">
-      <div class="overlay">
-        <div class="photo-title">Ocean Breath</div>
-        <div class="photo-category">Landscape</div>
-      </div>
-    </div>
-
-    <div class="gallery-item" data-category="street">
-      <img src="images/photo11.jpg" alt="Transit" loading="lazy">
-      <div class="overlay">
-        <div class="photo-title">Transit</div>
-        <div class="photo-category">Street</div>
-      </div>
-    </div>
-
-    <div class="gallery-item" data-category="nature">
-      <img src="images/photo12.jpg" alt="After Rain" loading="lazy">
-      <div class="overlay">
-        <div class="photo-title">After Rain</div>
-        <div class="photo-category">Nature</div>
-      </div>
-    </div>
-
+    <!-- Gallery items are loaded automatically from your GitHub repo folders -->
   </div>
 </section>
 
@@ -571,8 +460,6 @@ footer {
   <div class="contact-links">
     <a href="mailto:your@email.com">Email</a>
     <a href="#">Instagram</a>
-    <a href="#">Behance</a>
-    <a href="#">Twitter</a>
   </div>
 </section>
 
@@ -595,10 +482,30 @@ footer {
 
 <script>
 (() => {
+  /* =============================================================
+     CONFIGURATION — SET THESE TO YOUR GITHUB REPO DETAILS
+     ============================================================= */
+  const GITHUB_USER = 'YOUR_GITHUB_USERNAME';   // e.g. 'johndoe'
+  const GITHUB_REPO = 'YOUR_REPO_NAME';         // e.g. 'photography-portfolio'
+  const GITHUB_BRANCH = 'main';                 // or 'master'
+
+  // Folders to skip (these won't become gallery categories)
+  const IGNORE_FOLDERS = ['images', '.git', '.github', 'node_modules'];
+
+  // Image file extensions to include
+  const IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'png', 'webp', 'gif', 'avif'];
+
+  /* ============================================================= */
+
+  const API_BASE = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents`;
+  const RAW_BASE = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${GITHUB_BRANCH}`;
+
+  const galleryGrid = document.getElementById('galleryGrid');
+  const filtersContainer = document.getElementById('filters');
+
   /* ---- LOADER ---- */
   window.addEventListener('load', () => {
-    document.getElementById('loader').classList.add('hidden');
-    animateGalleryItems();
+    loadGalleryFromGitHub();
   });
 
   /* ---- NAV SCROLL ---- */
@@ -621,27 +528,6 @@ footer {
     });
   });
 
-  /* ---- FILTER ---- */
-  const filterBtns = document.querySelectorAll('.filter-btn');
-  const items = document.querySelectorAll('.gallery-item');
-
-  filterBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      filterBtns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      const cat = btn.dataset.filter;
-      items.forEach(item => {
-        if (cat === 'all' || item.dataset.category === cat) {
-          item.classList.remove('hidden');
-        } else {
-          item.classList.add('hidden');
-        }
-      });
-      // Re-trigger entrance animation
-      requestAnimationFrame(() => animateGalleryItems());
-    });
-  });
-
   /* ---- SCROLL REVEAL ---- */
   function animateGalleryItems() {
     const visible = document.querySelectorAll('.gallery-item:not(.hidden)');
@@ -650,6 +536,26 @@ footer {
       setTimeout(() => item.classList.add('visible'), i * 80);
     });
   }
+
+  /* ---- FILTER LOGIC ---- */
+  function setupFilters() {
+    filtersContainer.addEventListener('click', (e) => {
+      const btn = e.target.closest('.filter-btn');
+      if (!btn) return;
+      filtersContainer.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const cat = btn.dataset.filter;
+      document.querySelectorAll('.gallery-item').forEach(item => {
+        if (cat === 'all' || item.dataset.category === cat) {
+          item.classList.remove('hidden');
+        } else {
+          item.classList.add('hidden');
+        }
+      });
+      requestAnimationFrame(() => animateGalleryItems());
+    });
+  }
+  setupFilters();
 
   /* ---- LIGHTBOX ---- */
   const lightbox = document.getElementById('lightbox');
@@ -692,13 +598,6 @@ footer {
     lbCat.textContent = item.querySelector('.photo-category').textContent;
   }
 
-  document.querySelectorAll('.gallery-item').forEach((item, i) => {
-    item.addEventListener('click', () => {
-      const vis = getVisibleItems();
-      openLightbox(vis.indexOf(item));
-    });
-  });
-
   lightbox.querySelector('.lightbox-close').addEventListener('click', closeLightbox);
   lightbox.querySelector('.prev').addEventListener('click', (e) => { e.stopPropagation(); navigate(-1); });
   lightbox.querySelector('.next').addEventListener('click', (e) => { e.stopPropagation(); navigate(1); });
@@ -724,6 +623,99 @@ footer {
     });
   }, { threshold: 0.3 });
   sections.forEach(s => observer.observe(s));
+
+  /* ---- GITHUB DYNAMIC GALLERY LOADER ---- */
+  function prettifyName(filename) {
+    // Remove extension, replace dashes/underscores with spaces, title-case
+    return filename
+      .replace(/\.[^.]+$/, '')
+      .replace(/[-_]+/g, ' ')
+      .replace(/\b\w/g, c => c.toUpperCase());
+  }
+
+  function isImageFile(name) {
+    const ext = name.split('.').pop().toLowerCase();
+    return IMAGE_EXTENSIONS.includes(ext);
+  }
+
+  function createGalleryItem(imageUrl, title, category) {
+    const div = document.createElement('div');
+    div.className = 'gallery-item';
+    div.dataset.category = category;
+    div.innerHTML = `
+      <img src="${imageUrl}" alt="${title}" loading="lazy">
+      <div class="overlay">
+        <div class="photo-title">${title}</div>
+        <div class="photo-category">${category.charAt(0).toUpperCase() + category.slice(1)}</div>
+      </div>
+    `;
+    div.addEventListener('click', () => {
+      const vis = getVisibleItems();
+      openLightbox(vis.indexOf(div));
+    });
+    return div;
+  }
+
+  function addFilterButton(category) {
+    const btn = document.createElement('button');
+    btn.className = 'filter-btn';
+    btn.dataset.filter = category;
+    btn.textContent = category.charAt(0).toUpperCase() + category.slice(1);
+    filtersContainer.appendChild(btn);
+  }
+
+  async function loadGalleryFromGitHub() {
+    try {
+      // Step 1: Fetch root directory of the repo
+      const rootResponse = await fetch(`${API_BASE}?ref=${encodeURIComponent(GITHUB_BRANCH)}`);
+      if (!rootResponse.ok) throw new Error('Failed to fetch repo contents');
+      const rootContents = await rootResponse.json();
+
+      // Step 2: Find folders that are photo categories
+      const folders = rootContents.filter(
+        item => item.type === 'dir' && !IGNORE_FOLDERS.includes(item.name.toLowerCase())
+      );
+
+      if (folders.length === 0) {
+        galleryGrid.innerHTML = '<p style="text-align:center;color:var(--text-dim);grid-column:1/-1;">No photo folders found. Push folders with images to your repo.</p>';
+        document.getElementById('loader').classList.add('hidden');
+        return;
+      }
+
+      // Step 3: For each folder, fetch images and build gallery
+      const fetchPromises = folders.map(async (folder) => {
+        const category = folder.name.toLowerCase();
+        const folderResponse = await fetch(`${API_BASE}/${encodeURIComponent(folder.name)}?ref=${encodeURIComponent(GITHUB_BRANCH)}`);
+        if (!folderResponse.ok) return { category, images: [] };
+        const files = await folderResponse.json();
+        const images = files.filter(f => f.type === 'file' && isImageFile(f.name));
+        return { category, folderName: folder.name, images };
+      });
+
+      const results = await Promise.all(fetchPromises);
+
+      // Step 4: Build filter buttons and gallery items
+      results.forEach(({ category, folderName, images }) => {
+        if (images.length === 0) return;
+        addFilterButton(category);
+        images.forEach(img => {
+          const imageUrl = `${RAW_BASE}/${encodeURIComponent(folderName)}/${encodeURIComponent(img.name)}`;
+          const title = prettifyName(img.name);
+          const galleryItem = createGalleryItem(imageUrl, title, category);
+          galleryGrid.appendChild(galleryItem);
+        });
+      });
+
+      // Step 5: Hide loader and animate
+      document.getElementById('loader').classList.add('hidden');
+      animateGalleryItems();
+
+    } catch (err) {
+      console.error('Gallery load error:', err);
+      galleryGrid.innerHTML = '<p style="text-align:center;color:var(--text-dim);">Could not load gallery. Check your GitHub config at the top of the script.</p>';
+      document.getElementById('loader').classList.add('hidden');
+    }
+  }
 
 })();
 </script>
