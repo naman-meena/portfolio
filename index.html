@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -721,3 +722,728 @@ footer {
 </script>
 </body>
 </html>
+=======
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio — Photography</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   PHOTOGRAPHY PORTFOLIO
+   ---------------------------------------------------------
+   HOW TO ADD YOUR PHOTOS:
+   1. Place your image files in an "images/" folder next to this file
+   2. Scroll down to the HTML section marked "GALLERY ITEMS"
+   3. Replace the src="..." with your image filename, e.g. src="images/photo1.jpg"
+   4. Update the captions / categories as you wish
+   5. To add more photos, just copy one <div class="gallery-item"> block and paste it
+   ============================================================ */
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #0a0a0a;
+  --bg-card: #111;
+  --text: #f0ece2;
+  --text-dim: #888;
+  --accent: #c9a96e;
+  --accent-light: #e0c88a;
+  --serif: 'Playfair Display', 'Georgia', serif;
+  --sans: 'Inter', 'Helvetica Neue', sans-serif;
+  --elegant: 'Cormorant Garamond', 'Georgia', serif;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+/* === CUSTOM SCROLLBAR === */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+/* === LOADER === */
+#loader {
+  position: fixed; inset: 0; z-index: 9999;
+  background: var(--bg);
+  display: flex; align-items: center; justify-content: center;
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+#loader.hidden { opacity: 0; visibility: hidden; }
+#loader .line {
+  width: 60px; height: 1px; background: var(--accent);
+  animation: loaderPulse 1.2s ease-in-out infinite;
+}
+@keyframes loaderPulse {
+  0%, 100% { transform: scaleX(0.3); opacity: 0.4; }
+  50% { transform: scaleX(1); opacity: 1; }
+}
+
+/* === NAVIGATION === */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 24px 48px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: linear-gradient(to bottom, rgba(10,10,10,0.95), transparent);
+  transition: background 0.4s ease;
+}
+nav.scrolled { background: rgba(10,10,10,0.97); backdrop-filter: blur(20px); }
+.logo {
+  font-family: var(--serif);
+  font-size: 22px; font-weight: 700;
+  letter-spacing: 3px; text-transform: uppercase;
+  color: var(--text);
+  text-decoration: none;
+}
+.logo em {
+  font-style: italic; color: var(--accent);
+  font-weight: 400;
+}
+.nav-links { display: flex; gap: 36px; list-style: none; }
+.nav-links a {
+  color: var(--text-dim); text-decoration: none;
+  font-size: 13px; letter-spacing: 2px; text-transform: uppercase;
+  font-weight: 500; transition: color 0.3s ease;
+  position: relative;
+}
+.nav-links a::after {
+  content: ''; position: absolute; bottom: -4px; left: 0;
+  width: 0; height: 1px; background: var(--accent);
+  transition: width 0.3s ease;
+}
+.nav-links a:hover { color: var(--text); }
+.nav-links a:hover::after { width: 100%; }
+.nav-links a.active { color: var(--accent); }
+
+/* Hamburger */
+.hamburger {
+  display: none; flex-direction: column; gap: 5px;
+  cursor: pointer; background: none; border: none; padding: 4px;
+}
+.hamburger span {
+  width: 24px; height: 1.5px; background: var(--text);
+  transition: all 0.3s ease;
+}
+
+/* === HERO === */
+.hero {
+  height: 100vh; display: flex;
+  align-items: center; justify-content: center;
+  text-align: center; position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at center, rgba(201,169,110,0.06) 0%, transparent 70%);
+}
+.hero-content { position: relative; z-index: 1; }
+.hero h1 {
+  font-family: var(--elegant);
+  font-size: clamp(48px, 8vw, 120px);
+  font-weight: 300; line-height: 1.05;
+  letter-spacing: -1px;
+}
+.hero h1 .italic {
+  font-style: italic; color: var(--accent);
+}
+.hero .tagline {
+  font-size: 14px; letter-spacing: 6px; text-transform: uppercase;
+  color: var(--text-dim); margin-top: 28px; font-weight: 300;
+}
+.hero .scroll-hint {
+  position: absolute; bottom: 40px; left: 50%;
+  transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center;
+  gap: 8px; color: var(--text-dim); font-size: 11px;
+  letter-spacing: 3px; text-transform: uppercase;
+  animation: float 2.5s ease-in-out infinite;
+}
+.scroll-hint .arrow {
+  width: 1px; height: 40px; background: linear-gradient(to bottom, var(--accent), transparent);
+}
+@keyframes float {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(8px); }
+}
+
+/* === SECTION STYLING === */
+section { padding: 120px 48px; }
+.section-header {
+  text-align: center; margin-bottom: 80px;
+}
+.section-header .label {
+  font-size: 12px; letter-spacing: 5px; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 16px; font-weight: 500;
+}
+.section-header h2 {
+  font-family: var(--elegant);
+  font-size: clamp(36px, 5vw, 64px);
+  font-weight: 300; font-style: italic;
+}
+.section-header p {
+  max-width: 540px; margin: 20px auto 0;
+  color: var(--text-dim); font-weight: 300; font-size: 15px;
+  line-height: 1.8;
+}
+
+/* === FILTER TABS === */
+.filters {
+  display: flex; justify-content: center; gap: 8px;
+  flex-wrap: wrap; margin-bottom: 60px;
+}
+.filter-btn {
+  background: transparent; border: 1px solid #222;
+  color: var(--text-dim); padding: 10px 24px;
+  font-family: var(--sans); font-size: 12px;
+  letter-spacing: 2px; text-transform: uppercase;
+  cursor: pointer; border-radius: 30px;
+  transition: all 0.3s ease;
+}
+.filter-btn:hover { border-color: var(--accent); color: var(--text); }
+.filter-btn.active {
+  background: var(--accent); border-color: var(--accent);
+  color: var(--bg); font-weight: 600;
+}
+
+/* === MASONRY GALLERY === */
+.gallery {
+  columns: 3; column-gap: 20px;
+  max-width: 1400px; margin: 0 auto;
+}
+.gallery-item {
+  break-inside: avoid; margin-bottom: 20px;
+  position: relative; overflow: hidden;
+  border-radius: 6px; cursor: pointer;
+  opacity: 0; transform: translateY(40px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.gallery-item.visible {
+  opacity: 1; transform: translateY(0);
+}
+.gallery-item.hidden {
+  display: none;
+}
+.gallery-item img {
+  width: 100%; display: block;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.gallery-item:hover img {
+  transform: scale(1.05);
+}
+.gallery-item .overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 50%);
+  opacity: 0; transition: opacity 0.4s ease;
+  display: flex; flex-direction: column;
+  justify-content: flex-end; padding: 28px;
+}
+.gallery-item:hover .overlay { opacity: 1; }
+.overlay .photo-title {
+  font-family: var(--serif);
+  font-size: 18px; margin-bottom: 4px;
+}
+.overlay .photo-category {
+  font-size: 11px; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--accent);
+}
+
+/* === LIGHTBOX === */
+.lightbox {
+  position: fixed; inset: 0; z-index: 9999;
+  background: rgba(0,0,0,0.95);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; visibility: hidden;
+  transition: all 0.4s ease;
+  cursor: zoom-out;
+}
+.lightbox.active { opacity: 1; visibility: visible; }
+.lightbox img {
+  max-width: 90vw; max-height: 90vh;
+  object-fit: contain; border-radius: 4px;
+  transform: scale(0.9);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.lightbox.active img { transform: scale(1); }
+.lightbox-close {
+  position: absolute; top: 28px; right: 36px;
+  background: none; border: none; color: var(--text);
+  font-size: 28px; cursor: pointer;
+  opacity: 0.5; transition: opacity 0.3s;
+}
+.lightbox-close:hover { opacity: 1; }
+.lightbox-nav {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  background: none; border: none; color: var(--text);
+  font-size: 36px; cursor: pointer; padding: 20px;
+  opacity: 0.4; transition: opacity 0.3s;
+}
+.lightbox-nav:hover { opacity: 1; }
+.lightbox-nav.prev { left: 16px; }
+.lightbox-nav.next { right: 16px; }
+.lightbox-caption {
+  position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%);
+  text-align: center;
+}
+.lightbox-caption .lc-title {
+  font-family: var(--serif); font-size: 18px;
+}
+.lightbox-caption .lc-cat {
+  font-size: 11px; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--accent); margin-top: 4px;
+}
+
+/* === ABOUT STRIP === */
+.about-strip {
+  display: flex; align-items: center; gap: 80px;
+  max-width: 1100px; margin: 0 auto;
+  padding: 80px 0;
+}
+.about-strip .about-img {
+  width: 360px; min-width: 300px;
+  border-radius: 8px; overflow: hidden;
+  position: relative;
+}
+.about-strip .about-img img {
+  width: 100%; display: block;
+  filter: grayscale(30%);
+}
+.about-strip .about-img::after {
+  content: ''; position: absolute;
+  top: 16px; left: 16px; right: -16px; bottom: -16px;
+  border: 1px solid var(--accent); border-radius: 8px;
+  z-index: -1; opacity: 0.3;
+}
+.about-text h3 {
+  font-family: var(--elegant);
+  font-size: 38px; font-weight: 300;
+  font-style: italic; margin-bottom: 20px;
+}
+.about-text p {
+  color: var(--text-dim); font-weight: 300;
+  font-size: 15px; line-height: 1.9;
+  margin-bottom: 14px;
+}
+.about-text .signature {
+  font-family: var(--serif);
+  font-style: italic; font-size: 24px;
+  color: var(--accent); margin-top: 20px;
+}
+
+/* === CONTACT === */
+.contact-section {
+  text-align: center; padding-bottom: 60px;
+}
+.contact-links {
+  display: flex; justify-content: center;
+  gap: 40px; margin-top: 40px;
+}
+.contact-links a {
+  color: var(--text-dim); text-decoration: none;
+  font-size: 13px; letter-spacing: 2px;
+  text-transform: uppercase; transition: color 0.3s;
+  position: relative; padding-bottom: 4px;
+}
+.contact-links a::after {
+  content: ''; position: absolute; bottom: 0; left: 0;
+  width: 0; height: 1px; background: var(--accent);
+  transition: width 0.3s;
+}
+.contact-links a:hover { color: var(--accent); }
+.contact-links a:hover::after { width: 100%; }
+
+/* === FOOTER === */
+footer {
+  text-align: center; padding: 40px 48px;
+  border-top: 1px solid #1a1a1a;
+  color: var(--text-dim); font-size: 12px;
+  letter-spacing: 2px;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 1024px) {
+  .gallery { columns: 2; }
+  .about-strip { flex-direction: column; gap: 48px; text-align: center; }
+  .about-strip .about-img { width: 280px; min-width: 0; margin: 0 auto; }
+}
+@media (max-width: 768px) {
+  nav { padding: 20px 24px; }
+  .nav-links {
+    position: fixed; top: 0; right: -100%; width: 70%; height: 100vh;
+    background: var(--bg); flex-direction: column;
+    padding: 100px 48px; gap: 28px;
+    transition: right 0.4s ease;
+    border-left: 1px solid #1a1a1a;
+  }
+  .nav-links.open { right: 0; }
+  .nav-links a { font-size: 16px; }
+  .hamburger { display: flex; z-index: 101; }
+  .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(4px, 4px); }
+  .hamburger.active span:nth-child(2) { opacity: 0; }
+  .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(4px, -4px); }
+  section { padding: 80px 20px; }
+  .gallery { columns: 1; column-gap: 14px; }
+  .filters { gap: 6px; }
+  .filter-btn { padding: 8px 16px; font-size: 11px; }
+  .contact-links { flex-direction: column; gap: 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader"><div class="line"></div></div>
+
+<!-- NAVIGATION -->
+<nav id="navbar">
+  <a href="#" class="logo">Folio<em>.</em></a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#gallery" class="active">Work</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-content">
+    <h1>Capturing<br><span class="italic">Moments</span></h1>
+    <p class="tagline">Photography &nbsp;·&nbsp; Art &nbsp;·&nbsp; Vision</p>
+  </div>
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="arrow"></div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <div class="section-header">
+    <div class="label">Portfolio</div>
+    <h2>Selected Works</h2>
+    <p>A curated collection of moments frozen in time—each frame telling its own story.</p>
+  </div>
+
+  <div class="filters" id="filters">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <!-- Filter buttons are generated automatically from your repo folders -->
+  </div>
+
+  <div class="gallery" id="galleryGrid">
+    <!-- Gallery items are loaded automatically from your GitHub repo folders -->
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-strip">
+    <div class="about-img">
+      <!-- Replace with your portrait/profile photo -->
+      <img src="images/profile.jpg" alt="Photographer">
+    </div>
+    <div class="about-text">
+      <h3>The eye behind the lens</h3>
+      <p>
+        I believe every frame holds a universe. My work is about finding beauty in
+        the raw, the fleeting, and the overlooked. Whether it's the soft light of
+        dawn on a mountain ridge or the unguarded expression of a stranger, I chase
+        the moments that make you feel something.
+      </p>
+      <p>
+        Based out of passion, fueled by light. Available for commissions,
+        collaborations, and creative projects worldwide.
+      </p>
+      <div class="signature">— Your Name</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="contact-section">
+  <div class="section-header">
+    <div class="label">Get in Touch</div>
+    <h2>Let's Create Together</h2>
+    <p>Have a project in mind? I'd love to hear about it.</p>
+  </div>
+  <div class="contact-links">
+    <a href="mailto:your@email.com">Email</a>
+    <a href="#">Instagram</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  &copy; 2026 &nbsp;·&nbsp; All Rights Reserved
+</footer>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" aria-label="Close">&times;</button>
+  <button class="lightbox-nav prev" aria-label="Previous">&#8249;</button>
+  <button class="lightbox-nav next" aria-label="Next">&#8250;</button>
+  <img src="" alt="">
+  <div class="lightbox-caption">
+    <div class="lc-title"></div>
+    <div class="lc-cat"></div>
+  </div>
+</div>
+
+<script>
+(() => {
+  /* =============================================================
+     CONFIGURATION — SET THESE TO YOUR GITHUB REPO DETAILS
+     ============================================================= */
+  const GITHUB_USER = 'YOUR_GITHUB_USERNAME';   // e.g. 'johndoe'
+  const GITHUB_REPO = 'YOUR_REPO_NAME';         // e.g. 'photography-portfolio'
+  const GITHUB_BRANCH = 'main';                 // or 'master'
+
+  // Folders to skip (these won't become gallery categories)
+  const IGNORE_FOLDERS = ['images', '.git', '.github', 'node_modules'];
+
+  // Image file extensions to include
+  const IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'png', 'webp', 'gif', 'avif'];
+
+  /* ============================================================= */
+
+  const API_BASE = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents`;
+  const RAW_BASE = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${GITHUB_BRANCH}`;
+
+  const galleryGrid = document.getElementById('galleryGrid');
+  const filtersContainer = document.getElementById('filters');
+
+  /* ---- LOADER ---- */
+  window.addEventListener('load', () => {
+    loadGalleryFromGitHub();
+  });
+
+  /* ---- NAV SCROLL ---- */
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 80);
+  });
+
+  /* ---- HAMBURGER ---- */
+  const hamburger = document.getElementById('hamburger');
+  const navLinks = document.getElementById('navLinks');
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('active');
+    navLinks.classList.toggle('open');
+  });
+  navLinks.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      hamburger.classList.remove('active');
+      navLinks.classList.remove('open');
+    });
+  });
+
+  /* ---- SCROLL REVEAL ---- */
+  function animateGalleryItems() {
+    const visible = document.querySelectorAll('.gallery-item:not(.hidden)');
+    visible.forEach((item, i) => {
+      item.classList.remove('visible');
+      setTimeout(() => item.classList.add('visible'), i * 80);
+    });
+  }
+
+  /* ---- FILTER LOGIC ---- */
+  function setupFilters() {
+    filtersContainer.addEventListener('click', (e) => {
+      const btn = e.target.closest('.filter-btn');
+      if (!btn) return;
+      filtersContainer.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const cat = btn.dataset.filter;
+      document.querySelectorAll('.gallery-item').forEach(item => {
+        if (cat === 'all' || item.dataset.category === cat) {
+          item.classList.remove('hidden');
+        } else {
+          item.classList.add('hidden');
+        }
+      });
+      requestAnimationFrame(() => animateGalleryItems());
+    });
+  }
+  setupFilters();
+
+  /* ---- LIGHTBOX ---- */
+  const lightbox = document.getElementById('lightbox');
+  const lbImg = lightbox.querySelector('img');
+  const lbTitle = lightbox.querySelector('.lc-title');
+  const lbCat = lightbox.querySelector('.lc-cat');
+  let currentIndex = 0;
+  let visibleItems = [];
+
+  function getVisibleItems() {
+    return Array.from(document.querySelectorAll('.gallery-item:not(.hidden)'));
+  }
+
+  function openLightbox(index) {
+    visibleItems = getVisibleItems();
+    currentIndex = index;
+    const item = visibleItems[currentIndex];
+    const img = item.querySelector('img');
+    lbImg.src = img.src;
+    lbImg.alt = img.alt;
+    lbTitle.textContent = item.querySelector('.photo-title').textContent;
+    lbCat.textContent = item.querySelector('.photo-category').textContent;
+    lightbox.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  function navigate(dir) {
+    visibleItems = getVisibleItems();
+    currentIndex = (currentIndex + dir + visibleItems.length) % visibleItems.length;
+    const item = visibleItems[currentIndex];
+    const img = item.querySelector('img');
+    lbImg.src = img.src;
+    lbImg.alt = img.alt;
+    lbTitle.textContent = item.querySelector('.photo-title').textContent;
+    lbCat.textContent = item.querySelector('.photo-category').textContent;
+  }
+
+  lightbox.querySelector('.lightbox-close').addEventListener('click', closeLightbox);
+  lightbox.querySelector('.prev').addEventListener('click', (e) => { e.stopPropagation(); navigate(-1); });
+  lightbox.querySelector('.next').addEventListener('click', (e) => { e.stopPropagation(); navigate(1); });
+  lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+
+  document.addEventListener('keydown', (e) => {
+    if (!lightbox.classList.contains('active')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') navigate(-1);
+    if (e.key === 'ArrowRight') navigate(1);
+  });
+
+  /* ---- SMOOTH ACTIVE NAV ---- */
+  const sections = document.querySelectorAll('section[id]');
+  const navAnchors = document.querySelectorAll('.nav-links a');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navAnchors.forEach(a => a.classList.remove('active'));
+        const link = document.querySelector(`.nav-links a[href="#${entry.target.id}"]`);
+        if (link) link.classList.add('active');
+      }
+    });
+  }, { threshold: 0.3 });
+  sections.forEach(s => observer.observe(s));
+
+  /* ---- GITHUB DYNAMIC GALLERY LOADER ---- */
+  function prettifyName(filename) {
+    // Remove extension, replace dashes/underscores with spaces, title-case
+    return filename
+      .replace(/\.[^.]+$/, '')
+      .replace(/[-_]+/g, ' ')
+      .replace(/\b\w/g, c => c.toUpperCase());
+  }
+
+  function isImageFile(name) {
+    const ext = name.split('.').pop().toLowerCase();
+    return IMAGE_EXTENSIONS.includes(ext);
+  }
+
+  function createGalleryItem(imageUrl, title, category) {
+    const div = document.createElement('div');
+    div.className = 'gallery-item';
+    div.dataset.category = category;
+    div.innerHTML = `
+      <img src="${imageUrl}" alt="${title}" loading="lazy">
+      <div class="overlay">
+        <div class="photo-title">${title}</div>
+        <div class="photo-category">${category.charAt(0).toUpperCase() + category.slice(1)}</div>
+      </div>
+    `;
+    div.addEventListener('click', () => {
+      const vis = getVisibleItems();
+      openLightbox(vis.indexOf(div));
+    });
+    return div;
+  }
+
+  function addFilterButton(category) {
+    const btn = document.createElement('button');
+    btn.className = 'filter-btn';
+    btn.dataset.filter = category;
+    btn.textContent = category.charAt(0).toUpperCase() + category.slice(1);
+    filtersContainer.appendChild(btn);
+  }
+
+  async function loadGalleryFromGitHub() {
+    try {
+      // Step 1: Fetch root directory of the repo
+      const rootResponse = await fetch(`${API_BASE}?ref=${encodeURIComponent(GITHUB_BRANCH)}`);
+      if (!rootResponse.ok) throw new Error('Failed to fetch repo contents');
+      const rootContents = await rootResponse.json();
+
+      // Step 2: Find folders that are photo categories
+      const folders = rootContents.filter(
+        item => item.type === 'dir' && !IGNORE_FOLDERS.includes(item.name.toLowerCase())
+      );
+
+      if (folders.length === 0) {
+        galleryGrid.innerHTML = '<p style="text-align:center;color:var(--text-dim);grid-column:1/-1;">No photo folders found. Push folders with images to your repo.</p>';
+        document.getElementById('loader').classList.add('hidden');
+        return;
+      }
+
+      // Step 3: For each folder, fetch images and build gallery
+      const fetchPromises = folders.map(async (folder) => {
+        const category = folder.name.toLowerCase();
+        const folderResponse = await fetch(`${API_BASE}/${encodeURIComponent(folder.name)}?ref=${encodeURIComponent(GITHUB_BRANCH)}`);
+        if (!folderResponse.ok) return { category, images: [] };
+        const files = await folderResponse.json();
+        const images = files.filter(f => f.type === 'file' && isImageFile(f.name));
+        return { category, folderName: folder.name, images };
+      });
+
+      const results = await Promise.all(fetchPromises);
+
+      // Step 4: Build filter buttons and gallery items
+      results.forEach(({ category, folderName, images }) => {
+        if (images.length === 0) return;
+        addFilterButton(category);
+        images.forEach(img => {
+          const imageUrl = `${RAW_BASE}/${encodeURIComponent(folderName)}/${encodeURIComponent(img.name)}`;
+          const title = prettifyName(img.name);
+          const galleryItem = createGalleryItem(imageUrl, title, category);
+          galleryGrid.appendChild(galleryItem);
+        });
+      });
+
+      // Step 5: Hide loader and animate
+      document.getElementById('loader').classList.add('hidden');
+      animateGalleryItems();
+
+    } catch (err) {
+      console.error('Gallery load error:', err);
+      galleryGrid.innerHTML = '<p style="text-align:center;color:var(--text-dim);">Could not load gallery. Check your GitHub config at the top of the script.</p>';
+      document.getElementById('loader').classList.add('hidden');
+    }
+  }
+
+})();
+</script>
+</body>
+</html>
+>>>>>>> e2b0735a045153f217325f252caf542557a55070
