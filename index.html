@@ -487,7 +487,11 @@ footer {
   const filtersContainer = document.getElementById('filters');
 
   /* ---- LOADER ---- */
-  window.addEventListener('load', () => { loadGallery(); });
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => { loadGallery(); });
+  } else {
+    loadGallery();
+  }
 
   /* ---- NAV SCROLL ---- */
   const navbar = document.getElementById('navbar');
